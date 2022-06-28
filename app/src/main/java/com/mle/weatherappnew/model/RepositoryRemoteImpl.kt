@@ -5,15 +5,11 @@ import com.mle.weatherappnew.data.getRussianCities
 import com.mle.weatherappnew.data.getWorldCities
 import com.mle.weatherappnew.utils.Location
 
-class RepositoryLocalImpl : RepositoryMultiple {
+class RepositoryRemoteImpl: RepositorySpecific {
     override fun getWeatherSpecific(): Weather {
+        Thread {
+            Thread.sleep(2000L)
+        }.start()
         return Weather()
-    }
-
-    override fun getWeatherList(location: Location): List<Weather> {
-        return when (location) {
-            Location.Russia -> getRussianCities()
-            Location.World -> getWorldCities()
-        }
     }
 }
