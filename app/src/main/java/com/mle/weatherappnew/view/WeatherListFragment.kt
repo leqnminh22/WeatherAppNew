@@ -63,10 +63,10 @@ class WeatherListFragment : Fragment() {
 
     private fun changeWeatherDataSet() {
         if (isRussian) {
-            viewModel.getWeatherListForWorld()
+            viewModel.getWeatherListForRussia()
             binding.floatActionBtn.setImageResource(R.drawable.russia)
         } else {
-            viewModel.getWeatherListForRussia()
+            viewModel.getWeatherListForWorld()
             binding.floatActionBtn.setImageResource(R.drawable.world)
         }
         isRussian = !isRussian
