@@ -10,23 +10,29 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mle.weatherappnew.R
+import com.mle.weatherappnew.data.Weather
 import com.mle.weatherappnew.databinding.FragmentWeatherListBinding
 import com.mle.weatherappnew.viewmodel.AppState
 import com.mle.weatherappnew.viewmodel.WeatherListViewModel
 
-class WeatherListFragment: Fragment() {
+class WeatherListFragment : Fragment() {
 
     private var _binding: FragmentWeatherListBinding? = null
     private val binding get() = _binding!!
     private lateinit var viewModel: WeatherListViewModel
-    private val adapter = WeatherAdapter()
+
+    private val adapter = WeatherAdapter(object : OnWeatherClicked {
+        override fun onCityClicked(weather: Weather) {
+            parentFragmentManager
+                .beginTransaction()
+                .replace(R.id.container, WeatherDetailsFragment.newInstance(weather))
+                .addToBackStack("")
+                .commit()
+        }
+    })
 
 
     private var isRussian = true
-
-    companion object{
-        fun newInstance() = WeatherListFragment()
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,12 +46,13 @@ class WeatherListFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(WeatherListViewModel::class.java)
-        val observer = Observer<Any> {renderData(it as AppState)}
+        val observer = Observer<Any> { renderData(it as AppState) }
         viewModel.getLiveData().observe(viewLifecycleOwner, observer)
 
         val weatherList = binding.citiesListRecyclerView
         weatherList.adapter = adapter
-        weatherList.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        weatherList.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
 
         binding.floatActionBtn.visibility = View.VISIBLE
 
@@ -53,40 +60,48 @@ class WeatherListFragment: Fragment() {
             changeWeatherDataSet()
         }
         viewModel.getWeatherListForRussia()
+
     }
 
     private fun changeWeatherDataSet() {
-        if(isRussian){
+        if (isRussian) {
             viewModel.getWeatherListForWorld()
             binding.floatActionBtn.setImageResource(R.drawable.russia)
-        }
-        else {
+        } else {
             viewModel.getWeatherListForRussia()
             binding.floatActionBtn.setImageResource(R.drawable.world)
         }
         isRussian = !isRussian
     }
+
     private fun renderData(appState: AppState) {
-       when(appState) {
-           is AppState.SuccessSpecific -> {
-               binding.progressBar.visibility = View.GONE
-           }
-           is AppState.SuccessMultiple -> {
-               binding.progressBar.visibility = View.GONE
-               adapter.setData(appState.weatherList)
-           }
-           is AppState.Error -> {
-               Toast.makeText(requireContext(), "Error", Toast.LENGTH_LONG).show()
-               binding.progressBar.visibility = View.GONE
-           }
-           AppState.Loading -> {
-               binding.progressBar.visibility = View.VISIBLE
-           }
-       }
+        when (appState) {
+            is AppState.SuccessSpecific -> {
+                binding.progressBar.visibility = View.GONE
+            }
+            is AppState.SuccessMultiple -> {
+                binding.progressBar.visibility = View.GONE
+                adapter.setData(appState.weatherList)
+            }
+            is AppState.Error -> {
+                Toast.makeText(requireContext(), "Error", Toast.LENGTH_LONG).show()
+                binding.progressBar.visibility = View.GONE
+            }
+            AppState.Loading -> {
+                binding.progressBar.visibility = View.VISIBLE
+            }
+        }
+    }
+
+    companion object {
+        fun newInstance() = WeatherListFragment()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
+
+
 }

@@ -1,6 +1,10 @@
 package com.mle.weatherappnew.data
 
-class City(val cityName: String, val lat: Double, val lon: Double)
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
+class City(val cityName: String, val lat: Double, val lon: Double) : Parcelable
 
 fun getWorldCities(): List<Weather> {
     return listOf(

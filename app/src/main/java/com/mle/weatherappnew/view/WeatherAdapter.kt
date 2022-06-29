@@ -8,7 +8,7 @@ import com.mle.weatherappnew.R
 import com.mle.weatherappnew.data.Weather
 import com.mle.weatherappnew.databinding.ItemCityBinding
 
-class WeatherAdapter() :
+class WeatherAdapter(private val cityClicked: OnWeatherClicked) :
     RecyclerView.Adapter<WeatherAdapter.WeatherViewHolder>() {
 
     private var weatherData: List<Weather> = listOf()
@@ -37,8 +37,9 @@ class WeatherAdapter() :
         fun bind(weather: Weather) = with(binding) {
 
             cityName.text = weather.city.cityName
+            val weatherPosition = adapterPosition
             cardView.setOnClickListener{
-
+                cityClicked.onCityClicked(weatherData[weatherPosition])
             }
         }
     }
