@@ -19,7 +19,6 @@ class WeatherMainFragment : Fragment() {
     private var _binding: FragmentWeatherMainBinding? = null
     private val binding get() = _binding!!
 
-
     companion object {
         fun newInstance() = WeatherMainFragment()
     }
@@ -33,7 +32,6 @@ class WeatherMainFragment : Fragment() {
         _binding = FragmentWeatherMainBinding.inflate(inflater, container, false)
         return binding.root
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -75,6 +73,4 @@ class WeatherMainFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
-
 }

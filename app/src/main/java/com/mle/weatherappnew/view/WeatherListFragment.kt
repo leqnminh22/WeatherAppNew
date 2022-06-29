@@ -31,7 +31,6 @@ class WeatherListFragment : Fragment() {
         }
     })
 
-
     private var isRussian = true
 
     override fun onCreateView(
@@ -60,7 +59,6 @@ class WeatherListFragment : Fragment() {
             changeWeatherDataSet()
         }
         viewModel.getWeatherListForRussia()
-
     }
 
     private fun changeWeatherDataSet() {
@@ -101,7 +99,6 @@ class WeatherListFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
 
 
 }

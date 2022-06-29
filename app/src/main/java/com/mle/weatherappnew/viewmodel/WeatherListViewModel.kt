@@ -3,10 +3,10 @@ package com.mle.weatherappnew.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.mle.weatherappnew.model.RepositoryMultiple
-import com.mle.weatherappnew.model.RepositorySpecific
 import com.mle.weatherappnew.model.RepositoryLocalImpl
+import com.mle.weatherappnew.model.RepositoryMultiple
 import com.mle.weatherappnew.model.RepositoryRemoteImpl
+import com.mle.weatherappnew.model.RepositorySpecific
 import com.mle.weatherappnew.utils.Location
 
 class WeatherListViewModel(
@@ -43,6 +43,4 @@ class WeatherListViewModel(
         liveData.value = AppState.Loading
         liveData.postValue(AppState.SuccessMultiple(repositoryMultiple.getWeatherList(location)))
     }
-
-
 }
