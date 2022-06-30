@@ -8,6 +8,7 @@ import com.mle.weatherappnew.model.RepositoryMultiple
 import com.mle.weatherappnew.model.RepositoryRemoteImpl
 import com.mle.weatherappnew.model.RepositorySpecific
 import com.mle.weatherappnew.utils.Location
+import kotlin.random.Random
 
 class WeatherListViewModel(
     private val liveData: MutableLiveData<Any> = MutableLiveData()
@@ -41,6 +42,13 @@ class WeatherListViewModel(
     private fun sentRequestMultiple(location: Location) {
         repositoryMultiple = RepositoryLocalImpl()
         liveData.value = AppState.Loading
-        liveData.postValue(AppState.SuccessMultiple(repositoryMultiple.getWeatherList(location)))
+        Thread {
+            Thread.sleep(2000L)
+                if ((0..3).random(Random(System.currentTimeMillis())) == 1) {
+                    liveData.postValue(AppState.Error(IllegalStateException("Error happened")))
+                } else {
+                    liveData.postValue(AppState.SuccessMultiple(repositoryMultiple.getWeatherList(location)))
+                }
+        }.start()
     }
 }
