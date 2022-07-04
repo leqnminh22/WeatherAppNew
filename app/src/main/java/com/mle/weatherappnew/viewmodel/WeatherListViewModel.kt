@@ -37,8 +37,8 @@ class WeatherListViewModel(
         liveData.value = AppState.Loading
         Thread {
             Thread.sleep(2000L)
-                if ((0..3).random(Random(System.currentTimeMillis())) == 1) {
-                    liveData.postValue(AppState.Error(IllegalStateException("Error happened")))
+                if ((0..3).random(Random(System.currentTimeMillis())) == 5 ) {
+                    liveData.postValue(AppState.Error(IllegalStateException("Error occured")))
                 } else {
                     liveData.postValue(AppState.SuccessMultiple(repositoryMultiple.getWeatherList(location)))
                 }
