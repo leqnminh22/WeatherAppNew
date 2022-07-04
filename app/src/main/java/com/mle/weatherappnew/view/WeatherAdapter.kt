@@ -19,9 +19,10 @@ class WeatherAdapter(private val cityClicked: OnWeatherClicked) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherViewHolder {
-        val itemView =
-            LayoutInflater.from(parent.context).inflate(R.layout.item_city, parent, false)
-        return WeatherViewHolder(itemView)
+//        val itemView =
+//            LayoutInflater.from(parent.context).inflate(R.layout.item_city, parent, false)
+        return WeatherViewHolder(ItemCityBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false))
     }
 
     override fun onBindViewHolder(holder: WeatherViewHolder, position: Int) {
@@ -32,12 +33,11 @@ class WeatherAdapter(private val cityClicked: OnWeatherClicked) :
         return weatherData.size
     }
 
-    inner class WeatherViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class WeatherViewHolder(private val binding: ItemCityBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        val binding = ItemCityBinding.bind(itemView)
         fun bind(weather: Weather) = with(binding) {
-
             cityName.text = weather.city.cityName
+
             val weatherPosition = adapterPosition
             cardView.setOnClickListener {
                 cityClicked.onCityClicked(weatherData[weatherPosition])

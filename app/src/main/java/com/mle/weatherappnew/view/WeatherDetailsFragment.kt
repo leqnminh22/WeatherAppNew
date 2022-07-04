@@ -18,13 +18,10 @@ class WeatherDetailsFragment: Fragment() {
 
         const val ARG_WEATHER = "ARG_WEATHER"
 
-        fun newInstance(weather: Weather): WeatherDetailsFragment {
-            val args = Bundle()
-            args.putParcelable(ARG_WEATHER, weather)
-
-            val fragment = WeatherDetailsFragment ()
-            fragment.arguments = args
-            return fragment
+        fun newInstance(weather: Weather) = WeatherDetailsFragment().apply {
+            arguments = Bundle().apply {
+                putParcelable(ARG_WEATHER, weather)
+            }
         }
     }
 
