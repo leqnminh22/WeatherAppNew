@@ -39,17 +39,15 @@ class WeatherDetailsFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        val weather: Weather? = arguments?.getParcelable(ARG_WEATHER)
-        if(weather != null) {
-            showWeather(weather)
-        }
+        arguments?.getParcelable<Weather>(ARG_WEATHER)?.let {weather -> showWeather(weather) }
+
     }
 
-    private fun showWeather(weather: Weather) {
-        binding.cityName.text = weather.city.cityName
-        binding.temperatureValue.text = weather.temperature.toString()
-        binding.feelsLikeValue.text = weather.feelsLike.toString()
-        binding.cityCoordinates.text = String.format(
+    private fun showWeather(weather: Weather) = with(binding) {
+        cityName.text = weather.city.cityName
+        temperatureValue.text = weather.temperature.toString()
+        feelsLikeValue.text = weather.feelsLike.toString()
+        cityCoordinates.text = String.format(
             getString(R.string.city_coordinates),
             weather.city.lat.toString(),
             weather.city.lon.toString()

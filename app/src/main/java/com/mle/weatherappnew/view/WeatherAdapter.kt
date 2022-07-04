@@ -19,7 +19,8 @@ class WeatherAdapter(private val cityClicked: OnWeatherClicked) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_city, parent, false)
+        val itemView =
+            LayoutInflater.from(parent.context).inflate(R.layout.item_city, parent, false)
         return WeatherViewHolder(itemView)
     }
 
@@ -38,7 +39,7 @@ class WeatherAdapter(private val cityClicked: OnWeatherClicked) :
 
             cityName.text = weather.city.cityName
             val weatherPosition = adapterPosition
-            cardView.setOnClickListener{
+            cardView.setOnClickListener {
                 cityClicked.onCityClicked(weatherData[weatherPosition])
             }
         }

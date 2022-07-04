@@ -1,6 +1,5 @@
 package com.mle.weatherappnew.viewmodel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mle.weatherappnew.model.RepositoryLocalImpl
@@ -18,20 +17,14 @@ class WeatherListViewModel(
     private lateinit var repositorySpecific: RepositorySpecific
     private lateinit var repositoryMultiple: RepositoryMultiple
 
-    fun getLiveData(): LiveData<Any> {
-        return liveData
-    }
+    fun getLiveData() = liveData
 
     fun getLocalWeather() = sentRequestSpecific()
     fun getRemoteWeather() = sentRequestSpecific()
 
-    fun getWeatherListForRussia() {
-        sentRequestMultiple(Location.Russia)
-    }
+    fun getWeatherListForRussia() = sentRequestMultiple(Location.Russia)
 
-    fun getWeatherListForWorld() {
-        sentRequestMultiple(Location.World)
-    }
+    fun getWeatherListForWorld() = sentRequestMultiple(Location.World)
 
     private fun sentRequestSpecific() {
         repositorySpecific = RepositoryRemoteImpl()
