@@ -25,11 +25,17 @@ class WeatherListFragment : Fragment() {
 
     private val adapter = WeatherAdapter(object : OnWeatherClicked {
         override fun onCityClicked(weather: Weather) {
-            parentFragmentManager
-                .beginTransaction()
-                .replace(R.id.container, WeatherDetailsFragment.newInstance(weather))
-                .addToBackStack("")
-                .commit()
+            val manager = activity?.supportFragmentManager
+            if(manager != null) {
+                val bundle = Bundle()
+                bundle.putParcelable(WeatherDetailsFragment.ARG_WEATHER, weather)
+                manager.beginTransaction()
+                    .add(R.id.container, WeatherDetailsFragment.newInstance(bundle))
+                    .hide(this@WeatherListFragment)
+                    .addToBackStack("")
+                    .commitAllowingStateLoss()
+            }
+
         }
     })
 
