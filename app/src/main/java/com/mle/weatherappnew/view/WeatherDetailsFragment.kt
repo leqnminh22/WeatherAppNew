@@ -9,22 +9,17 @@ import com.mle.weatherappnew.R
 import com.mle.weatherappnew.data.Weather
 import com.mle.weatherappnew.databinding.FragmentWeatherDetailsBinding
 
-class WeatherDetailsFragment: Fragment() {
+class WeatherDetailsFragment : Fragment() {
 
     private var _binding: FragmentWeatherDetailsBinding? = null
     private val binding get() = _binding!!
 
-    companion object{
+    companion object {
 
         const val ARG_WEATHER = "ARG_WEATHER"
 
-        fun newInstance(weather: Weather): WeatherDetailsFragment {
-            val args = Bundle()
-            args.putParcelable(ARG_WEATHER, weather)
-
-            val fragment = WeatherDetailsFragment ()
-            fragment.arguments = args
-            return fragment
+        fun newInstance(bundle: Bundle) = WeatherDetailsFragment().apply {
+            arguments = bundle
         }
     }
 
@@ -39,21 +34,21 @@ class WeatherDetailsFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        val weather: Weather? = arguments?.getParcelable(ARG_WEATHER)
-        if(weather != null) {
-            showWeather(weather)
-        }
+        arguments?.getParcelable<Weather>(ARG_WEATHER)?.let { weather -> showWeather(weather) }
+
     }
 
     private fun showWeather(weather: Weather) {
-        binding.cityName.text = weather.city.cityName
-        binding.temperatureValue.text = weather.temperature.toString()
-        binding.feelsLikeValue.text = weather.feelsLike.toString()
-        binding.cityCoordinates.text = String.format(
-            getString(R.string.city_coordinates),
-            weather.city.lat.toString(),
-            weather.city.lon.toString()
-        )
+        with(binding) {
+            cityName.text = weather.city.cityName
+            temperatureValue.text = weather.temperature.toString()
+            feelsLikeValue.text = weather.feelsLike.toString()
+            cityCoordinates.text = String.format(
+                getString(R.string.city_coordinates),
+                weather.city.lat.toString(),
+                weather.city.lon.toString()
+            )
+        }
     }
 
     override fun onDestroyView() {

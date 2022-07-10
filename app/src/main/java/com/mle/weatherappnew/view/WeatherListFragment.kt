@@ -9,11 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.mle.weatherappnew.R
 import com.mle.weatherappnew.data.Weather
 import com.mle.weatherappnew.databinding.FragmentWeatherListBinding
 import com.mle.weatherappnew.viewmodel.AppState
 import com.mle.weatherappnew.viewmodel.WeatherListViewModel
+import java.time.Duration
 
 class WeatherListFragment : Fragment() {
 
@@ -23,11 +25,17 @@ class WeatherListFragment : Fragment() {
 
     private val adapter = WeatherAdapter(object : OnWeatherClicked {
         override fun onCityClicked(weather: Weather) {
-            parentFragmentManager
-                .beginTransaction()
-                .replace(R.id.container, WeatherDetailsFragment.newInstance(weather))
-                .addToBackStack("")
-                .commit()
+            val manager = activity?.supportFragmentManager
+            if(manager != null) {
+                val bundle = Bundle()
+                bundle.putParcelable(WeatherDetailsFragment.ARG_WEATHER, weather)
+                manager.beginTransaction()
+                    .add(R.id.container, WeatherDetailsFragment.newInstance(bundle))
+                    .hide(this@WeatherListFragment)
+                    .addToBackStack("")
+                    .commitAllowingStateLoss()
+            }
+
         }
     })
 
@@ -63,11 +71,15 @@ class WeatherListFragment : Fragment() {
 
     private fun changeWeatherDataSet() {
         if (isRussian) {
-            viewModel.getWeatherListForRussia()
-            binding.floatActionBtn.setImageResource(R.drawable.russia)
-        } else {
             viewModel.getWeatherListForWorld()
-            binding.floatActionBtn.setImageResource(R.drawable.world)
+            binding.floatActionBtn.apply {
+                setImageResource(R.drawable.world)
+            }
+        } else {
+            viewModel.getWeatherListForRussia()
+            binding.floatActionBtn.apply {
+                setImageResource(R.drawable.russia)
+            }
         }
         isRussian = !isRussian
     }
@@ -82,13 +94,23 @@ class WeatherListFragment : Fragment() {
                 adapter.setData(appState.weatherList)
             }
             is AppState.Error -> {
-                Toast.makeText(requireContext(), "Error", Toast.LENGTH_LONG).show()
+                binding.root.SnackError("Error", Snackbar.LENGTH_SHORT,"Try again") {
+                    if(isRussian){
+                        viewModel.getWeatherListForRussia()
+                    } else {
+                        viewModel.getWeatherListForWorld()
+                    }
+                }
                 binding.progressBar.visibility = View.GONE
             }
             AppState.Loading -> {
                 binding.progressBar.visibility = View.VISIBLE
             }
         }
+    }
+
+    private fun View.SnackError(msg: String, duration: Int, toAction: String, block: (v: View )-> Unit) {
+        Snackbar.make(this, msg, duration).setAction(toAction, block)
     }
 
     companion object {
@@ -99,6 +121,4 @@ class WeatherListFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
-
 }

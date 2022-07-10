@@ -1,6 +1,5 @@
 package com.mle.weatherappnew.viewmodel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.mle.weatherappnew.model.RepositoryLocalImpl
@@ -8,6 +7,7 @@ import com.mle.weatherappnew.model.RepositoryMultiple
 import com.mle.weatherappnew.model.RepositoryRemoteImpl
 import com.mle.weatherappnew.model.RepositorySpecific
 import com.mle.weatherappnew.utils.Location
+import kotlin.random.Random
 
 class WeatherListViewModel(
     private val liveData: MutableLiveData<Any> = MutableLiveData()
@@ -17,20 +17,14 @@ class WeatherListViewModel(
     private lateinit var repositorySpecific: RepositorySpecific
     private lateinit var repositoryMultiple: RepositoryMultiple
 
-    fun getLiveData(): LiveData<Any> {
-        return liveData
-    }
+    fun getLiveData() = liveData
 
     fun getLocalWeather() = sentRequestSpecific()
     fun getRemoteWeather() = sentRequestSpecific()
 
-    fun getWeatherListForRussia() {
-        sentRequestMultiple(Location.Russia)
-    }
+    fun getWeatherListForRussia() = sentRequestMultiple(Location.Russia)
 
-    fun getWeatherListForWorld() {
-        sentRequestMultiple(Location.World)
-    }
+    fun getWeatherListForWorld() = sentRequestMultiple(Location.World)
 
     private fun sentRequestSpecific() {
         repositorySpecific = RepositoryRemoteImpl()
@@ -41,6 +35,13 @@ class WeatherListViewModel(
     private fun sentRequestMultiple(location: Location) {
         repositoryMultiple = RepositoryLocalImpl()
         liveData.value = AppState.Loading
-        liveData.postValue(AppState.SuccessMultiple(repositoryMultiple.getWeatherList(location)))
+        Thread {
+            Thread.sleep(200L)
+                if ((0..3).random(Random(System.currentTimeMillis())) == 5 ) {
+                    liveData.postValue(AppState.Error(IllegalStateException("Error occured")))
+                } else {
+                    liveData.postValue(AppState.SuccessMultiple(repositoryMultiple.getWeatherList(location)))
+                }
+        }.start()
     }
 }
