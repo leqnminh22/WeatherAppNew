@@ -38,15 +38,17 @@ class WeatherDetailsFragment : Fragment() {
 
     }
 
-    private fun showWeather(weather: Weather) = with(binding) {
-        cityName.text = weather.city.cityName
-        temperatureValue.text = weather.temperature.toString()
-        feelsLikeValue.text = weather.feelsLike.toString()
-        cityCoordinates.text = String.format(
-            getString(R.string.city_coordinates),
-            weather.city.lat.toString(),
-            weather.city.lon.toString()
-        )
+    private fun showWeather(weather: Weather) {
+        with(binding) {
+            cityName.text = weather.city.cityName
+            temperatureValue.text = weather.temperature.toString()
+            feelsLikeValue.text = weather.feelsLike.toString()
+            cityCoordinates.text = String.format(
+                getString(R.string.city_coordinates),
+                weather.city.lat.toString(),
+                weather.city.lon.toString()
+            )
+        }
     }
 
     override fun onDestroyView() {

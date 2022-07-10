@@ -71,14 +71,14 @@ class WeatherListFragment : Fragment() {
 
     private fun changeWeatherDataSet() {
         if (isRussian) {
-            viewModel.getWeatherListForRussia()
-            binding.floatActionBtn.apply {
-                setImageResource(R.drawable.russia)
-            }
-        } else {
             viewModel.getWeatherListForWorld()
             binding.floatActionBtn.apply {
                 setImageResource(R.drawable.world)
+            }
+        } else {
+            viewModel.getWeatherListForRussia()
+            binding.floatActionBtn.apply {
+                setImageResource(R.drawable.russia)
             }
         }
         isRussian = !isRussian
@@ -110,7 +110,7 @@ class WeatherListFragment : Fragment() {
     }
 
     private fun View.SnackError(msg: String, duration: Int, toAction: String, block: (v: View )-> Unit) {
-        Snackbar.make(this, msg, duration).setAction("Try again", block)
+        Snackbar.make(this, msg, duration).setAction(toAction, block)
     }
 
     companion object {
