@@ -12,9 +12,7 @@ import androidx.fragment.app.Fragment
 import com.mle.weatherappnew.R
 import com.mle.weatherappnew.data.Weather
 import com.mle.weatherappnew.databinding.FragmentWeatherDetailsBinding
-import com.mle.weatherappnew.model.model.WeatherDTO
 import com.mle.weatherappnew.utils.WeatherLoader
-import java.net.URL
 
 class WeatherDetailsFragment : Fragment() {
 
