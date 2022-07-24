@@ -30,5 +30,6 @@ object WeatherLoader {
             val weatherDTO = Gson().fromJson(getLines(reader), WeatherDTO::class.java)
             onResponse.onResponse(weatherDTO)
         }.start()
+        urlConnection.disconnect()
     }
 }
