@@ -30,13 +30,12 @@ class WeatherLoader(private val onResponse: OnResponse,
             Thread {
                 lateinit var urlConnection: HttpsURLConnection
                 try {
-                    urlConnection = uri.openConnection() as HttpsURLConnection
-                    urlConnection.requestMethod = "GET"
-                    urlConnection.readTimeout = 5000
-                    urlConnection.addRequestProperty(
-                        "X-Yandex-API-Key",
-                        BuildConfig.WEATHER_API_KEY
-                    )
+                    urlConnection = (uri.openConnection() as HttpsURLConnection).apply {
+                        requestMethod = "GET"
+                        readTimeout = 5000
+                        addRequestProperty("X-Yandex-API-Key", BuildConfig.WEATHER_API_KEY)
+                    }
+
                     val reader = BufferedReader(InputStreamReader(urlConnection.inputStream))
                     val response = getLines(reader)
                     val weatherDTO = Gson().fromJson(response, WeatherDTO::class.java)
