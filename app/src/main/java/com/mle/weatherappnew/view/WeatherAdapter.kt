@@ -40,7 +40,7 @@ class WeatherAdapter(private val cityClicked: OnWeatherClicked) :
 
             val weatherPosition = adapterPosition
             cardView.setOnClickListener {
-                cityClicked.onCityClicked(weatherData[weatherPosition])
+                cityClicked.onWeatherClicked(weatherData[weatherPosition])
             }
         }
     }

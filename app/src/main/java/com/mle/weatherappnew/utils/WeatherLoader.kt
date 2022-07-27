@@ -15,30 +15,38 @@ import java.net.MalformedURLException
 import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
-object WeatherLoader {
+class WeatherLoader(private val onResponse: OnResponse,
+                    private val lat: Double,
+                    private val lon: Double) {
 
     @RequiresApi(Build.VERSION_CODES.N)
-    fun request(lat: Double, lon: Double, onResponse: OnResponse) {
+    fun loadWeather() {
         try{
             val uri =
                 URL("https://api.weather.yandex.ru/v2/informers?lat=${lat}&lon=${lon}")
 
+            val handler = Handler(Looper.getMainLooper())
+
             Thread {
                 lateinit var urlConnection: HttpsURLConnection
                 try {
-
                     urlConnection = uri.openConnection() as HttpsURLConnection
+                    urlConnection.requestMethod = "GET"
                     urlConnection.readTimeout = 5000
                     urlConnection.addRequestProperty(
                         "X-Yandex-API-Key",
                         BuildConfig.WEATHER_API_KEY
                     )
                     val reader = BufferedReader(InputStreamReader(urlConnection.inputStream))
-                    val weatherDTO = Gson().fromJson(getLines(reader), WeatherDTO::class.java)
-                    onResponse.onResponse(weatherDTO)
+                    val response = getLines(reader)
+                    val weatherDTO = Gson().fromJson(response, WeatherDTO::class.java)
+                    handler.post {
+                        onResponse.onLoaded(weatherDTO)
+                    }
                 } catch (e: Exception) {
                     Log.e("","Fail connection", e)
                     e.printStackTrace()
+                    onResponse.onFailed(e)
                 } finally {
                     urlConnection.disconnect()
                 }
