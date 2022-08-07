@@ -1,5 +1,6 @@
 package com.mle.weatherappnew.view
 
+import android.content.IntentFilter
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.mle.weatherappnew.R
@@ -32,6 +33,10 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
+
+        val receiver = MyReceiver()
+        registerReceiver(receiver, IntentFilter("android.intent.action.AIRPLANE_MODE"))
+
     }
 
     private fun showCity() {
