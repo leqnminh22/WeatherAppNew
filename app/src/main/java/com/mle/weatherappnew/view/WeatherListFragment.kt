@@ -24,7 +24,7 @@ class WeatherListFragment : Fragment() {
     private lateinit var viewModel: WeatherListViewModel
 
     private val adapter = WeatherAdapter(object : OnWeatherClicked {
-        override fun onCityClicked(weather: Weather) {
+        override fun onWeatherClicked(weather: Weather) {
             val manager = activity?.supportFragmentManager
             if(manager != null) {
                 val bundle = Bundle()
@@ -35,7 +35,6 @@ class WeatherListFragment : Fragment() {
                     .addToBackStack("")
                     .commitAllowingStateLoss()
             }
-
         }
     })
 

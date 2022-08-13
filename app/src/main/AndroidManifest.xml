@@ -24,6 +24,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service android:name=".view.DetailsService"/>
+
+        <receiver android:name=".view.MyReceiver"
+            android:exported="false"
+            android:enabled="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.AIRPLANE_MODE"/>
+
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>
