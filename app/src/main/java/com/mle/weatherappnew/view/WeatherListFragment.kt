@@ -13,6 +13,7 @@ import com.google.android.material.snackbar.Snackbar
 import com.mle.weatherappnew.R
 import com.mle.weatherappnew.data.Weather
 import com.mle.weatherappnew.databinding.FragmentWeatherListBinding
+import com.mle.weatherappnew.utils.snackMsgError
 import com.mle.weatherappnew.viewmodel.AppState
 import com.mle.weatherappnew.viewmodel.WeatherListViewModel
 import java.time.Duration
@@ -93,7 +94,7 @@ class WeatherListFragment : Fragment() {
                 adapter.setData(appState.weatherList)
             }
             is AppState.Error -> {
-                binding.root.SnackError("Error", Snackbar.LENGTH_SHORT,"Try again") {
+                binding.root.snackMsgError("Error", Snackbar.LENGTH_SHORT,"Try again") {
                     if(isRussian){
                         viewModel.getWeatherListForRussia()
                     } else {
@@ -108,9 +109,7 @@ class WeatherListFragment : Fragment() {
         }
     }
 
-    private fun View.SnackError(msg: String, duration: Int, toAction: String, block: (v: View )-> Unit) {
-        Snackbar.make(this, msg, duration).setAction(toAction, block)
-    }
+
 
     companion object {
         fun newInstance() = WeatherListFragment()

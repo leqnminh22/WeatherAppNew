@@ -9,6 +9,7 @@ import com.google.gson.Gson
 import com.mle.weatherappnew.BuildConfig
 import com.mle.weatherappnew.model.model.WeatherDTO
 import java.io.BufferedReader
+import java.io.IOException
 import java.io.InputStreamReader
 import java.net.MalformedURLException
 import java.net.URL
@@ -59,8 +60,8 @@ class DetailsService(name: String = "DetailsService") : IntentService(name) {
                 val weatherDTO = Gson().fromJson(response, WeatherDTO::class.java)
                 onResponse(weatherDTO)
 
-            } catch (e: Exception) {
-                onErrorRequest(e.message ?: "Empty error")
+            } catch (e: IOException) {
+                onErrorRequest(e.message ?: "Stream closed")
             } finally {
                 urlConnection.disconnect()
             }
@@ -112,7 +113,6 @@ class DetailsService(name: String = "DetailsService") : IntentService(name) {
     private fun onEmptyData() {
         putLoadResult(DETAILS_DATA_EMPTY_EXTRA)
         LocalBroadcastManager.getInstance(this).sendBroadcast(broadcastIntent)
-
     }
 
     private fun onMalformedURL() {

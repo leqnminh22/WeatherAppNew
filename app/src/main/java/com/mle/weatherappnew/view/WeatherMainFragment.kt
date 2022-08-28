@@ -39,6 +39,7 @@ class WeatherMainFragment : Fragment() {
         val observer = Observer<Any> { renderData(it as AppState) }
         viewModel.getLiveData().observe(viewLifecycleOwner, observer)
         viewModel.getLocalWeather()
+
     }
 
     private fun renderData(appState: AppState) {
